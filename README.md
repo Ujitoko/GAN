@@ -9,7 +9,7 @@ Currently, the following kind of GANs are implemented.
 
 ## GANs for generating images
 
-* vanilla GAN
+* vanilla GAN(implemented by keras)
 * DCGAN
 * unrolled GAN
 * BEGAN
