@@ -174,8 +174,8 @@ class IRASUTOYA:
 
             # label
             con = np.zeros([1, 4]) -1
-            print(files_imgs[i])
-            print(self.df.iloc[i,:])
+            #print(files_imgs[i])
+            #print(self.df.iloc[i,:])
             cat = self.df.iloc[i,1:]
             cat_np = np.array(cat)
             cat_ = cat_np[np.newaxis, :]
