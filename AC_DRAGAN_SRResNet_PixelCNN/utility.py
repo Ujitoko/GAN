@@ -5,6 +5,8 @@ from PIL import Image
 import numpy as np
 from enum import Enum
 
+import pandas as pd
+
 # save metrics
 def save_metrics(model_name, metrics, epoch=None):
     # make directory if there is not
@@ -33,14 +35,14 @@ def save_metrics(model_name, metrics, epoch=None):
     plt.close()
 
 # save images
-def save_imgs(model_name, images, plot_dim=(10,10), size=(10,10), name=None):
+def save_imgs(model_name, images, plot_dim=(10,10), size=(20,20), name=None):
     # make directory if there is not
     dir_path = "generated_figures_" + model_name
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
 
     num_examples = plot_dim[0]*plot_dim[1]
-    num_examples = 100
+    #num_examples = 100
     fig = plt.figure(figsize=size)
 
     for i in range(num_examples):
@@ -145,3 +147,35 @@ class DTD:
 
         (tex_img_np/255)
         return tex_img_np, label_np
+
+class IRASUTOYA:
+    def __init__(self):
+        print("init IRASUTOYA")
+        self.df = pd.read_csv("./IRASUTOYA_128/labels/attr_rev.csv")
+        self.irasutoya_len = len(self.df)
+        print(len(self.df))
+
+    def extract(self, num, size):
+        files_imgs = os.listdir("./IRASUTOYA_128/images")
+        rand_index = np.random.randint(0, self.irasutoya_len-1, size=num)
+        #ex_texture = self.texture[rand_index]
+
+        tex_img = []
+        irasutoya_img_np = np.empty((0, size, size, 3), np.float32)
+        label_np = np.empty((0, 4), np.float32)
+
+        for i in rand_index:
+            # image
+            img_np = np.load(os.path.join("./IRASUTOYA_128/images", files_imgs[i]))
+            img_np = img_np[np.newaxis, :]
+            irasutoya_img_np = np.append(irasutoya_img_np, img_np, axis=0)
+
+            # label
+            con = np.zeros([1, 4]) -1
+            cat = self.df.iloc[i,1:]
+            cat_np = np.array(cat)
+            cat_ = cat_np[np.newaxis, :]
+            label_np = np.append(label_np, cat_, axis=0)
+
+        irasutoya_img_np = irasutoya_img_np/255
+        return irasutoya_img_np, label_np
