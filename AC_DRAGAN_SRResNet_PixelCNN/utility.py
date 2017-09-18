@@ -157,6 +157,8 @@ class IRASUTOYA:
 
     def extract(self, num, size):
         files_imgs = os.listdir("./IRASUTOYA_128/images")
+        files_imgs.sort()
+        #print(files_imgs[:])
         rand_index = np.random.randint(0, self.irasutoya_len-1, size=num)
         #ex_texture = self.texture[rand_index]
 
@@ -166,12 +168,14 @@ class IRASUTOYA:
 
         for i in rand_index:
             # image
-            img_np = np.load(os.path.join("./IRASUTOYA_128/images", files_imgs[i]))
+            img_np = np.load(os.path.join("./IRASUTOYA_128/images", files_imgs[i+1]))
             img_np = img_np[np.newaxis, :]
             irasutoya_img_np = np.append(irasutoya_img_np, img_np, axis=0)
 
             # label
             con = np.zeros([1, 4]) -1
+            print(files_imgs[i])
+            print(self.df.iloc[i,:])
             cat = self.df.iloc[i,1:]
             cat_np = np.array(cat)
             cat_ = cat_np[np.newaxis, :]
