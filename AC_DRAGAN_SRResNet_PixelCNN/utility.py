@@ -173,13 +173,14 @@ class IRASUTOYA:
             irasutoya_img_np = np.append(irasutoya_img_np, img_np, axis=0)
 
             # label
-            con = np.zeros([1, 4]) -1
+            #cat = np.zeros([1, 4]) -1
             #print(files_imgs[i])
             #print(self.df.iloc[i,:])
             cat = self.df.iloc[i,1:]
             cat_np = np.array(cat)
+            cat_np = (cat_np*0.5) + 0.5
             cat_ = cat_np[np.newaxis, :]
             label_np = np.append(label_np, cat_, axis=0)
 
-        irasutoya_img_np = irasutoya_img_np/255
+        irasutoya_img_np = (2*irasutoya_img_np/255) -1
         return irasutoya_img_np, label_np
